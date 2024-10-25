@@ -1,5 +1,13 @@
 import {useState} from 'react';
 
+function Square({value, onSquareClick}) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
 function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
     if (squares[i] || calculateWinner(squares)) {
@@ -46,11 +54,44 @@ function Board({ xIsNext, squares, onPlay }) {
   )
 }
 
-function Square({value, onSquareClick}) {
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+      //todo
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+
+    if (move > 0) {
+      description = "Go to move #" + move;
+    } else {
+      description = "Go to game start";
+    }
+    return (
+      <li>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
   return (
-    <button className="square" onClick={onSquareClick}>
-      {value}
-    </button>
+    <div className="game">
+      <div className="game-board"> 
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
   );
 }
 
@@ -74,26 +115,4 @@ function calculateWinner(squares) {
 
   }
   return null;
-}
-
-export default function Game() {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentSquares = history[history.length - 1];
-
-  function handlePlay(nextSquares) {
-    setHistory([...history, nextSquares]);
-    setXIsNext(!xIsNext);
-  }
-
-  return (
-    <div className="game">
-      <div className="game-board"> 
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      </div>
-      <div className="game-info">
-        <ol>{/* To Do*/}</ol>
-      </div>
-    </div>
-  );
 }
