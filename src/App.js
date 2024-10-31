@@ -19,8 +19,7 @@ function Board({ xIsNext, squares, onPlay }) {
     } else {
       nextSquares[i] = "O";
     }
-    // setSquares(nextSquares);
-    // setXIsNext(!xIsNext);
+
     onPlay(nextSquares);
   }
 
@@ -67,7 +66,6 @@ export default function Game() {
   }
 
   function jumpTo(nextMove) {
-      //todo
       setCurrentMove(nextMove);
   }
 
@@ -81,7 +79,7 @@ export default function Game() {
     }
     return (
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+        <button className="move" onClick={() => jumpTo(move)}>{description}</button>
       </li>
     );
   });
